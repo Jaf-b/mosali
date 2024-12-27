@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { EmployeeService } from '../../core/service/employee.service';
 import { EmployeeInfoComponent } from '../employee-info/employee-info.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-list-employee',
-  imports: [MatButtonModule, RouterLink, EmployeeInfoComponent],
+  imports: [MatButtonModule, RouterLink, EmployeeInfoComponent, MatCardModule],
   template: `
     <div class="container">
       <div>
@@ -18,15 +19,21 @@ import { EmployeeInfoComponent } from '../employee-info/employee-info.component'
       </div>
     </div>
     @for (item of Employee; track $index) {
-    <a [routerLink]="'/details/' + $index"
-      ><app-employee-info [employee]="item"
-    /></a>
+    <a [routerLink]="'/details/' + $index">
+      <mat-card>
+        <mat-card-content>
+          <app-employee-info [employee]="item" />
+        </mat-card-content>
+      </mat-card>
+    </a>
     }@empty {
     <p>
       Oups! pas encore d'employés à afficher <br />
       commencer par ajouter un employé
     </p>
     }
+    <br />
+    <br />
   `,
   styles: `
 
@@ -55,6 +62,9 @@ import { EmployeeInfoComponent } from '../employee-info/employee-info.component'
     justify-content:center;
     align-items:center;
     gap:1rem;
+  }
+  mat-card{
+    background-color:white;
   }
 
   `,

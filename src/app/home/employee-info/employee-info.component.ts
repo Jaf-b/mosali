@@ -6,39 +6,35 @@ import { Employee } from '../../core/models/employee.model';
   selector: 'app-employee-info',
   imports: [MatCardModule],
   template: `
-    <mat-card>
-      <mat-card-content>
-        <div class="identity">
-          <h2>
-            {{ employee().fullname }}
-          </h2>
-          <span>
-            {{
-              employee().email +
-                '  -   ' +
-                employee().phone +
-                '   sexe:   ' +
-                employee().sexe
-            }}
-          </span>
-        </div>
-        <div class="adresse">
-          <h3>Addresse:</h3>
-          <span>{{
-            employee().adress.street +
-              ' - ' +
-              employee().adress.city +
-              ' - ' +
-              employee().adress.country
-          }}</span>
-        </div>
-        <div class="hobbie">
-          @for (item of employee().hobbies; track $index) {
-          <span>{{ 'passe temps N ' + ($index + 1) + ' : ' + item }}</span>
-          }
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <div class="identity">
+      <h2>
+        {{ employee().fullname }}
+      </h2>
+      <span>
+        {{
+          employee().email +
+            '  -   ' +
+            employee().phone +
+            '   sexe:   ' +
+            employee().sexe
+        }}
+      </span>
+    </div>
+    <div class="adresse">
+      <h3>Addresse:</h3>
+      <span>{{
+        employee().adress.street +
+          ' - ' +
+          employee().adress.city +
+          ' - ' +
+          employee().adress.country
+      }}</span>
+    </div>
+    <div class="hobbie">
+      @for (item of employee().hobbies; track $index) {
+      <span>{{ 'passe temps N ' + ($index + 1) + ' : ' + item }}</span>
+      }
+    </div>
   `,
   styles: `
   .identity{

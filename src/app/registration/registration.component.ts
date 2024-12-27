@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
@@ -24,7 +24,7 @@ import { Router } from '@angular/router';
     CommonModule,
   ],
   template: `
-    <app-nav-bar [return]="true" [title]="'Add Employee'"></app-nav-bar>
+    <app-nav-bar [return]="true" [title]="title"></app-nav-bar>
     <div class="container">
       <form [formGroup]="employeeForm" (ngSubmit)="submit()">
         @let controls = employeeForm.controls;
@@ -178,6 +178,8 @@ import { Router } from '@angular/router';
         <div class="btn_send">
           <button type="submit" mat-fab extended>Send</button>
         </div>
+        <br />
+        <br />
       </form>
     </div>
   `,
@@ -254,7 +256,20 @@ import { Router } from '@angular/router';
   }
   `,
 })
-export default class RegistrationComponent {
+export default class RegistrationComponent implements OnInit {
+  title = 'Add Employee';
+  ngOnInit(): void {
+    if (history.state.fullname) {
+      const employee = history.state as Employee;
+      this.employeeForm.patchValue(employee);
+      this.removeHobbyForm(0);
+      employee.hobbies.forEach((hobby) => {
+        const formControl = this.fb.nonNullable.control(hobby);
+        this.employeeForm.controls.hobbies.push(formControl);
+      });
+      this.title = `Edit ${employee.fullname}`;
+    }
+  }
   private fb = inject(FormBuilder);
   private es = inject(EmployeeService);
   private router = inject(Router);
@@ -293,7 +308,12 @@ export default class RegistrationComponent {
       const employee: Employee = {
         ...this.employeeForm.getRawValue(),
       };
-      this.es.AddEmployee(employee);
+      if (history.state.id) {
+        const index = Number(history.state.id);
+        this.es.EditEmployee(index, employee);
+      } else {
+        this.es.AddEmployee(employee);
+      }
       this.router.navigateByUrl('/');
     } else {
       this.employeeForm.markAllAsTouched;
